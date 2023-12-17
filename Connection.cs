@@ -46,5 +46,27 @@ namespace Phonebook
                 }
             }
         }
+
+        public void Insert(Subscription subscription)
+        {
+            try
+            {
+                command.CommandText = $"Insert into Subscription([PhoneNumber],MonthlyBill,FreeCallMinutesCount,PricePerMinute,MinutesOutsideEU,PricePerMinuteEU,FreeSMSCount,PricePerSMS,InvoiceDate) values ('{subscription.PhoneNumber}',{subscription.MonthlyBill},{subscription.FreeCallMinutesCount},{subscription.PricePerMinute},{subscription.MinutesOutsideEU},{subscription.PricePerMinuteEU},{subscription.FreeSMSCount},{subscription.PricePerSMS},'{subscription.InvoiceDate.Day}.{subscription.InvoiceDate.Month}.{subscription.InvoiceDate.Year}')";
+                command.CommandType = System.Data.CommandType.Text;
+                connect.Open();
+                command.ExecuteNonQuery();
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Incorrect data");
+            }
+            finally
+            {
+                if (connect != null)
+                {
+                    connect.Close();
+                }
+            }
+        }
     }
 }
