@@ -179,5 +179,50 @@ namespace Phonebook
                 }
             }
         }
+
+        public void Update(TelephoneSubscriber telephoneSubscriber)
+        {
+            try
+            {
+                command.CommandText = $"Update TelephoneSubscriber set [PersonalID] = '{telephoneSubscriber.PersonalID}', [Names] = '{telephoneSubscriber.Names}', [Address] = '{telephoneSubscriber.Address}' where [PhoneNumber] = '{telephoneSubscriber.PhoneNumber}'";
+                command.CommandType = System.Data.CommandType.Text;
+                connect.Open();
+                command.ExecuteNonQuery();
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show($"{err}");
+            }
+            finally
+            {
+                if (connect != null)
+                {
+                    connect.Close();
+                }
+            }
+        }
+
+
+        public void Delete(TelephoneSubscriber telephoneSubscriber)
+        {
+            try
+            {
+                command.CommandText = $"Delete from TelephoneSubscriber where [PhoneNumber] = '{telephoneSubscriber.PhoneNumber}'";
+                command.CommandType = System.Data.CommandType.Text;
+                connect.Open();
+                command.ExecuteNonQuery();
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show($"{err}");
+            }
+            finally
+            {
+                if (connect != null)
+                {
+                    connect.Close();
+                }
+            }
+        }
     }
 }
