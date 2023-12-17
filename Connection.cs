@@ -11,8 +11,8 @@ namespace Phonebook
 {
     class Connection
     {
-        OleDbConnection connect;
-        OleDbCommand command;
+        public OleDbConnection connect;
+        public OleDbCommand command;
 
         private void ConnectionTo()
         {
@@ -30,6 +30,50 @@ namespace Phonebook
             try
             {
                 command.CommandText = $"Insert into Payment([Invoice],PaymentDate,[PhoneNumber],PhoneBill,PaymentStatus) values ('{payment.Invoice}','{payment.PaymentDate.Day}.{payment.PaymentDate.Month}.{payment.PaymentDate.Year}','{payment.PhoneNumber}',{payment.PhoneBill},{payment.PaymentStatus})";
+                command.CommandType = System.Data.CommandType.Text;
+                connect.Open();
+                command.ExecuteNonQuery();
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show($"{err}");
+            }
+            finally
+            {
+                if (connect != null)
+                {
+                    connect.Close();
+                }
+            }
+        }
+
+        public void Update(Payment payment)
+        {
+            try
+            {
+                command.CommandText = $"Update Payment set PaymentDate = '{payment.PaymentDate.Day}.{payment.PaymentDate.Month}.{payment.PaymentDate.Year}',[PhoneNumber] = '{payment.PhoneNumber}',PhoneBill = {payment.PhoneBill},PaymentStatus = {payment.PaymentStatus} where [Invoice] = '{payment.Invoice}'";
+                command.CommandType = System.Data.CommandType.Text;
+                connect.Open();
+                command.ExecuteNonQuery();
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show($"{err}");
+            }
+            finally
+            {
+                if (connect != null)
+                {
+                    connect.Close();
+                }
+            }
+        }
+
+        public void Delete(Payment payment)
+        {
+            try
+            {
+                command.CommandText = $"Delete from Payment where [Invoice] = '{payment.Invoice}'";
                 command.CommandType = System.Data.CommandType.Text;
                 connect.Open();
                 command.ExecuteNonQuery();
