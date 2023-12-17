@@ -34,9 +34,9 @@ namespace Phonebook
                 connect.Open();
                 command.ExecuteNonQuery();
             }
-            catch (Exception)
+            catch (Exception err)
             {
-                MessageBox.Show("Incorrect data");
+                MessageBox.Show($"{err}");
             }
             finally
             {
@@ -56,9 +56,31 @@ namespace Phonebook
                 connect.Open();
                 command.ExecuteNonQuery();
             }
-            catch (Exception)
+            catch (Exception err)
             {
-                MessageBox.Show("Incorrect data");
+                MessageBox.Show($"{err}");
+            }
+            finally
+            {
+                if (connect != null)
+                {
+                    connect.Close();
+                }
+            }
+        }
+
+        public void Insert(TelephoneSubscriber telephoneSubscriber)
+        {
+            try
+            {
+                command.CommandText = $"Insert into TelephoneSubscriber([PhoneNumber],[PersonalID],[Names],[Address]) values ('{telephoneSubscriber.PhoneNumber}','{telephoneSubscriber.PersonalID}','{telephoneSubscriber.Names}','{telephoneSubscriber.Address}')";
+                command.CommandType = System.Data.CommandType.Text;
+                connect.Open();
+                command.ExecuteNonQuery();
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show($"{err}");
             }
             finally
             {

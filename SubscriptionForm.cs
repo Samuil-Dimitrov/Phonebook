@@ -11,11 +11,11 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Phonebook
 {
-    public partial class Form2 : Form
+    public partial class SubscriptionForm : Form
     {
         Connection connection = new Connection();
 
-        public Form2()
+        public SubscriptionForm()
         {
             InitializeComponent();
         }
@@ -38,6 +38,18 @@ namespace Phonebook
             subscription.PricePerSMS = decimal.Parse(textBox8.Text);
             subscription.InvoiceDate = dateTimePicker1.Value.Date;
             connection.Insert(subscription);
+        }
+
+        private void telephoneSubscriberToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TelephoneSubscriberForm form3 = new TelephoneSubscriberForm();
+            form3.ShowDialog();
+        }
+
+        private void paymentToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PaymentForm form1 = new PaymentForm();
+            form1.ShowDialog();
         }
     }
 }

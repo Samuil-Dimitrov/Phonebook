@@ -1,6 +1,6 @@
 ﻿namespace Phonebook
 {
-    partial class Form1
+    partial class PaymentForm
     {
         /// <summary>
         /// Required designer variable.
@@ -102,9 +102,9 @@
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(12, 189);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(85, 13);
+            this.label5.Size = new System.Drawing.Size(81, 13);
             this.label5.TabIndex = 9;
-            this.label5.Text = "Payed/Unpayed";
+            this.label5.Text = "Payment Status";
             this.label5.Click += new System.EventHandler(this.label5_Click);
             // 
             // button1
@@ -194,7 +194,7 @@
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Payment";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

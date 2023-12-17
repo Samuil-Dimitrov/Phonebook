@@ -10,11 +10,11 @@ using System.Windows.Forms;
 
 namespace Phonebook
 {
-    public partial class Form1 : Form
+    public partial class PaymentForm : Form
     {
         Connection connection = new Connection();
 
-        public Form1()
+        public PaymentForm()
         {
             InitializeComponent();
         }
