@@ -1,4 +1,6 @@
-﻿namespace Phonebook
+﻿using System;
+
+namespace Phonebook
 {
     partial class PaymentForm
     {
@@ -214,6 +216,16 @@
             this.ResumeLayout(false);
             this.PerformLayout();
 
+        }
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion

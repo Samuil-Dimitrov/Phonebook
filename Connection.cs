@@ -113,6 +113,51 @@ namespace Phonebook
             }
         }
 
+        public void Update(Subscription subscription)
+        {
+            try
+            {
+                command.CommandText = $"Update Subscription set MonthlyBill = {subscription.MonthlyBill}, FreeCallMinutesCount = {subscription.FreeCallMinutesCount}, PricePerMinute = {subscription.PricePerMinute}, MinutesOutsideEU = {subscription.MinutesOutsideEU}, PricePerMinuteEU={subscription.PricePerMinuteEU}, FreeSMSCount={subscription.FreeSMSCount}, PricePerSMS={subscription.PricePerSMS}, InvoiceDate = '{subscription.InvoiceDate.Day}.{subscription.InvoiceDate.Month}.{subscription.InvoiceDate.Year}'  where [PhoneNumber] = '{subscription.PhoneNumber}'";
+                command.CommandType = System.Data.CommandType.Text;
+                connect.Open();
+                command.ExecuteNonQuery();
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show($"{err}");
+            }
+            finally
+            {
+                if (connect != null)
+                {
+                    connect.Close();
+                }
+            }
+        }
+
+        public void Delete(Subscription subscription)
+        {
+            try
+            {
+                command.CommandText = $"Delete from Subscription where [PhoneNumber] = '{subscription.PhoneNumber}'";
+                command.CommandType = System.Data.CommandType.Text;
+                connect.Open();
+                command.ExecuteNonQuery();
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show($"{err}");
+            }
+            finally
+            {
+                if (connect != null)
+                {
+                    connect.Close();
+                }
+            }
+        }
+
+
         public void Insert(TelephoneSubscriber telephoneSubscriber)
         {
             try

@@ -39,6 +39,7 @@ namespace Phonebook
             // 0 for payed 1 for unpayed
             payment.PaymentStatus = comboBox1.SelectedIndex == 0 ? true : false;
             connection.Insert(payment);
+            displayData();
         }
 
         private void displayData()
@@ -57,7 +58,7 @@ namespace Phonebook
             dateTimePicker1.Value = Convert.ToDateTime(dataGridView1.CurrentRow.Cells[1].Value);
             textBox2.Text = dataGridView1.CurrentRow.Cells[2].Value.ToString();
             textBox3.Text = dataGridView1.CurrentRow.Cells[3].Value.ToString();
-            comboBox1.SelectedIndex = Convert.ToBoolean(dataGridView1.CurrentRow.Cells[4].Value) ? 0 : 1;            // 0 for payed 1 for unpayed
+            comboBox1.SelectedIndex = Convert.ToBoolean(dataGridView1.CurrentRow.Cells[4].Value) ? 0 : 1; // 0 for payed 1 for unpayed
         }
 
         private void button2_Click(object sender, EventArgs e)
