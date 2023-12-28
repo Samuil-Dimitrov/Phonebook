@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Phonebook
 {
-    class Subscription
+    public class Subscription
     {
         public string PhoneNumber { get; set; }
         public decimal MonthlyBill { get; set; }

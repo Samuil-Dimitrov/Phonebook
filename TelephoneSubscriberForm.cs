@@ -78,5 +78,39 @@ namespace Phonebook
             connection.Delete(telephoneSubscriber);
             displayData();
         }
+
+        private void Clear(object sender, EventArgs e)
+        {
+            displayData();
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            // Select No 2
+            string PersonalID = textBox2.Text; // Replace with the actual subscriber ID
+            var connectionString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\Users\LENOVO\Desktop\Phonebook.accdb";
+
+            using (var connection = new OleDbConnection(connectionString))
+            {
+                connection.Open();
+
+                string mySelect = "SELECT P.Invoice, P.PaymentDate, S.PersonalID, S.PhoneNumber, P.PhoneBill, P.PaymentStatus " +
+                                  "FROM Payment P " +
+                                  "INNER JOIN TelephoneSubscriber S ON P.PhoneNumber = S.PhoneNumber " +
+                                  "WHERE S.PersonalID = @PersonalID";
+
+                using (var command = new OleDbCommand(mySelect, connection))
+                {
+                    command.Parameters.AddWithValue("@PersonalID", PersonalID);
+
+                    using (OleDbDataAdapter adapter = new OleDbDataAdapter(command))
+                    {
+                        DataTable dt = new DataTable();
+                        adapter.Fill(dt);
+                        dataGridView1.DataSource = dt;
+                    }
+                }
+            }
+        }
     }
 }
