@@ -112,5 +112,36 @@ namespace Phonebook
                 }
             }
         }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            // Select No 3
+            string PersonalID = textBox2.Text; // Replace with the actual subscriber ID
+            var connectionString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\Users\LENOVO\Desktop\Phonebook.accdb";
+
+            using (var connection = new OleDbConnection(connectionString))
+            {
+                connection.Open();
+
+                // Updated SQL query to retrieve subscribers with more than one telephone number
+                string mySelect = "SELECT PersonalID, COUNT(PhoneNumber) AS NumberOfPhoneNumbers " +
+                                  "FROM TelephoneSubscriber " +
+                                  "WHERE PersonalID = @PersonalID " +
+                                  "GROUP BY PersonalID " +
+                                  "HAVING COUNT(PhoneNumber) > 1";
+
+                using (var command = new OleDbCommand(mySelect, connection))
+                {
+                    command.Parameters.AddWithValue("@PersonalID", PersonalID);
+
+                    using (OleDbDataAdapter adapter = new OleDbDataAdapter(command))
+                    {
+                        DataTable dt = new DataTable();
+                        adapter.Fill(dt);
+                        dataGridView1.DataSource = dt;
+                    }
+                }
+            }
+        }
     }
 }
