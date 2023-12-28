@@ -86,5 +86,49 @@ namespace Phonebook
             connection.Delete(payment);
             displayData();
         }
+
+        private void label6_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            // Select No 1
+            string phoneNumber = textBox2.Text;
+            DateTime startDate = dateTimePicker2.Value.Date;
+            DateTime endDate = dateTimePicker3.Value.Date;
+
+            var connect = new OleDbConnection(@"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = C:\Users\LENOVO\Desktop\Phonebook.accdb");
+            connect.Open();
+            string mySelect = "SELECT Invoice, PaymentDate, PhoneNumber, PhoneBill, PaymentStatus " +
+                                 "FROM Payment " +
+                                 "WHERE PaymentDate BETWEEN @StartDate AND @EndDate " +
+                                 "AND PhoneNumber = @PhoneNumber " +
+                                 "AND PaymentStatus = False";
+
+            using (var cmd = new OleDbCommand(mySelect, connect))
+            {
+                // Use parameters to avoid SQL injection and ensure correct date formatting
+                cmd.Parameters.AddWithValue("@StartDate", startDate);
+                cmd.Parameters.AddWithValue("@EndDate", endDate);
+                cmd.Parameters.AddWithValue("@PhoneNumber", phoneNumber);
+
+                using (OleDbDataAdapter adapter = new OleDbDataAdapter(cmd))
+                {
+                    DataTable dt = new DataTable();
+                    adapter.Fill(dt);
+                    dataGridView1.DataSource = dt;
+                }
+            }
+        }
+
+        //Join name of the customer
+
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            displayData();
+        }
     }
 }
