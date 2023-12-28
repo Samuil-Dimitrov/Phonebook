@@ -130,5 +130,36 @@ namespace Phonebook
         {
             displayData();
         }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            string connectionString = @"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = C:\Users\LENOVO\Desktop\Phonebook.accdb";
+            try
+            {
+                using (var connection = new OleDbConnection(connectionString))
+                {
+                    connection.Open();
+
+                    string mySelect = "SELECT [S.PersonalID], [S.Names], [P.PhoneNumber], [P.Invoice], [P.PaymentDate], [P.PhoneBill], [P.PaymentStatus] " +
+                                      "FROM Payment P " +
+                                      "LEFT JOIN TelephoneSubscriber S ON P.PhoneNumber = S.PhoneNumber " +
+                                      "WHERE P.PaymentStatus = False";
+
+                    using (var command = new OleDbCommand(mySelect, connection))
+                    {
+                        using (OleDbDataAdapter adapter = new OleDbDataAdapter(command))
+                        {
+                            DataTable dt = new DataTable();
+                            adapter.Fill(dt);
+                            dataGridView1.DataSource = dt;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}");
+            }
+        }
     }
 }
