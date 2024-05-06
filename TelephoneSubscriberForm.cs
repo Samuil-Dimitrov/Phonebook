@@ -36,25 +36,26 @@ namespace Phonebook
 
         private void button1_Click(object sender, EventArgs e)
         {
-            TelephoneSubscriber telephoneSubscriber = new TelephoneSubscriber();
-            telephoneSubscriber.PhoneNumber = textBox1.Text;
-            telephoneSubscriber.PersonalID = textBox2.Text;
-            telephoneSubscriber.Names = textBox3.Text;
-            telephoneSubscriber.Address = textBox4.Text;
-
+            TelephoneSubscriber.TelephoneSubscriberBuilder subscriberBuilder = new TelephoneSubscriber.TelephoneSubscriberBuilder();
+            TelephoneSubscriber telephoneSubscriber = subscriberBuilder
+                                                        .SetPhoneNumber(textBox1.Text)
+                                                        .SetPersonalID(textBox2.Text)
+                                                        .SetNames(textBox3.Text)
+                                                        .SetAddress(textBox4.Text)
+                                                        .Build();
             connection.Insert(telephoneSubscriber);
             displayData();
-
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            TelephoneSubscriber telephoneSubscriber = new TelephoneSubscriber();
-            telephoneSubscriber.PhoneNumber = textBox1.Text;
-            telephoneSubscriber.PersonalID = textBox2.Text;
-            telephoneSubscriber.Names = textBox3.Text;
-            telephoneSubscriber.Address = textBox4.Text;
-
+            TelephoneSubscriber.TelephoneSubscriberBuilder subscriberBuilder = new TelephoneSubscriber.TelephoneSubscriberBuilder();
+            TelephoneSubscriber telephoneSubscriber = subscriberBuilder
+                                                        .SetPhoneNumber(textBox1.Text)
+                                                        .SetPersonalID(textBox2.Text)
+                                                        .SetNames(textBox3.Text)
+                                                        .SetAddress(textBox4.Text)
+                                                        .Build();
             connection.Update(telephoneSubscriber);
             displayData();
         }
@@ -69,12 +70,13 @@ namespace Phonebook
 
         private void button3_Click(object sender, EventArgs e)
         {
-            TelephoneSubscriber telephoneSubscriber = new TelephoneSubscriber();
-            telephoneSubscriber.PhoneNumber = textBox1.Text;
-            telephoneSubscriber.PersonalID = textBox2.Text;
-            telephoneSubscriber.Names = textBox3.Text;
-            telephoneSubscriber.Address = textBox4.Text;
-
+            TelephoneSubscriber.TelephoneSubscriberBuilder subscriberBuilder = new TelephoneSubscriber.TelephoneSubscriberBuilder();
+            TelephoneSubscriber telephoneSubscriber = subscriberBuilder
+                                                        .SetPhoneNumber(textBox1.Text)
+                                                        .SetPersonalID(textBox2.Text)
+                                                        .SetNames(textBox3.Text)
+                                                        .SetAddress(textBox4.Text)
+                                                        .Build();
             connection.Delete(telephoneSubscriber);
             displayData();
         }
@@ -125,10 +127,10 @@ namespace Phonebook
 
                 // Updated SQL query to retrieve subscribers with more than one telephone number
                 string mySelect = "SELECT PersonalID, COUNT(PhoneNumber) AS NumberOfPhoneNumbers " +
-                                  "FROM TelephoneSubscriber " +
-                                  "WHERE PersonalID = @PersonalID " +
-                                  "GROUP BY PersonalID " +
-                                  "HAVING COUNT(PhoneNumber) > 1";
+                                    "FROM TelephoneSubscriber " +
+                                    "WHERE PersonalID = @PersonalID " +
+                                    "GROUP BY PersonalID " +
+                                    "HAVING COUNT(PhoneNumber) > 1";
 
                 using (var command = new OleDbCommand(mySelect, connection))
                 {

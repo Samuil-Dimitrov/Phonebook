@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static Phonebook.Payment;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Phonebook
@@ -31,13 +32,15 @@ namespace Phonebook
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Payment payment = new Payment();
-            payment.Invoice = textBox1.Text;
-            payment.PaymentDate = dateTimePicker1.Value.Date;
-            payment.PhoneNumber = textBox2.Text;
-            payment.PhoneBill = Decimal.Parse(textBox3.Text);
-            // 0 for payed 1 for unpayed
-            payment.PaymentStatus = comboBox1.SelectedIndex == 0 ? true : false;
+            Payment.PaymentBuilder paymentBuilder = new Payment.PaymentBuilder();
+            // Builder за създаване на обекта Payment
+            Payment payment = paymentBuilder
+                                .SetInvoice(textBox1.Text)
+                                .SetPaymentDate(dateTimePicker1.Value.Date)
+                                .SetPhoneNumber(textBox2.Text)
+                                .SetPhoneBill(Decimal.Parse(textBox3.Text))
+                                .SetPaymentStatus(comboBox1.SelectedIndex == 0)
+                                .Build();
             connection.Insert(payment);
             displayData();
         }
@@ -63,26 +66,28 @@ namespace Phonebook
 
         private void button2_Click(object sender, EventArgs e)
         {
-            Payment payment = new Payment();
-            payment.Invoice = textBox1.Text;
-            payment.PaymentDate = dateTimePicker1.Value.Date;
-            payment.PhoneNumber = textBox2.Text;
-            payment.PhoneBill = Decimal.Parse(textBox3.Text);
-            // 0 for payed 1 for unpayed
-            payment.PaymentStatus = comboBox1.SelectedIndex == 0 ? true : false;
+            Payment.PaymentBuilder paymentBuilder = new Payment.PaymentBuilder();
+            Payment payment = paymentBuilder
+                                .SetInvoice(textBox1.Text)
+                                .SetPaymentDate(dateTimePicker1.Value.Date)
+                                .SetPhoneNumber(textBox2.Text)
+                                .SetPhoneBill(Decimal.Parse(textBox3.Text))
+                                .SetPaymentStatus(comboBox1.SelectedIndex == 0)
+                                .Build();
             connection.Update(payment);
             displayData();
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            Payment payment = new Payment();
-            payment.Invoice = textBox1.Text;
-            payment.PaymentDate = dateTimePicker1.Value.Date;
-            payment.PhoneNumber = textBox2.Text;
-            payment.PhoneBill = Decimal.Parse(textBox3.Text);
-            // 0 for payed 1 for unpayed
-            payment.PaymentStatus = comboBox1.SelectedIndex == 0 ? true : false;
+            Payment.PaymentBuilder paymentBuilder = new Payment.PaymentBuilder();
+            Payment payment = paymentBuilder
+                    .SetInvoice(textBox1.Text)
+                    .SetPaymentDate(dateTimePicker1.Value.Date)
+                    .SetPhoneNumber(textBox2.Text)
+                    .SetPhoneBill(Decimal.Parse(textBox3.Text))
+                    .SetPaymentStatus(comboBox1.SelectedIndex == 0)
+                    .Build();
             connection.Delete(payment);
             displayData();
         }
@@ -123,9 +128,6 @@ namespace Phonebook
             }
         }
 
-        //Join name of the customer
-
-
         private void button5_Click(object sender, EventArgs e)
         {
             displayData();
@@ -160,6 +162,12 @@ namespace Phonebook
             {
                 MessageBox.Show($"Error: {ex.Message}");
             }
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            Form form = new CustomGraphicsForm();
+            form.Show();
         }
     }
 }

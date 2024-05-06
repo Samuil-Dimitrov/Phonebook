@@ -28,16 +28,18 @@ namespace Phonebook
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Subscription subscription = new Subscription();
-            subscription.PhoneNumber = textBox1.Text;
-            subscription.MonthlyBill = decimal.Parse(textBox2.Text);
-            subscription.FreeCallMinutesCount = int.Parse(textBox3.Text);
-            subscription.PricePerMinute = decimal.Parse(textBox4.Text);
-            subscription.MinutesOutsideEU = int.Parse(textBox5.Text);
-            subscription.PricePerMinuteEU = decimal.Parse(textBox6.Text);
-            subscription.FreeSMSCount = int.Parse(textBox7.Text);
-            subscription.PricePerSMS = decimal.Parse(textBox8.Text);
-            subscription.InvoiceDate = dateTimePicker1.Value.Date;
+            Subscription.SubscriptionBuilder subscriptionBuilder = new Subscription.SubscriptionBuilder();
+            Subscription subscription = subscriptionBuilder
+                                            .SetPhoneNumber(textBox1.Text)
+                                            .SetMonthlyBill(decimal.Parse(textBox2.Text))
+                                            .SetFreeCallMinutesCount(int.Parse(textBox3.Text))
+                                            .SetPricePerMinute(decimal.Parse(textBox4.Text))
+                                            .SetMinutesOutsideEU(int.Parse(textBox5.Text))
+                                            .SetPricePerMinuteEU(decimal.Parse(textBox6.Text))
+                                            .SetFreeSMSCount(int.Parse(textBox7.Text))
+                                            .SetPricePerSMS(decimal.Parse(textBox8.Text))
+                                            .SetInvoiceDate(dateTimePicker1.Value.Date)
+                                            .Build();
             connection.Insert(subscription);
             displayData();
         }
@@ -56,16 +58,18 @@ namespace Phonebook
 
         private void button2_Click(object sender, EventArgs e)
         {
-            Subscription subscription = new Subscription();
-            subscription.PhoneNumber = textBox1.Text;
-            subscription.MonthlyBill = decimal.Parse(textBox2.Text);
-            subscription.FreeCallMinutesCount = int.Parse(textBox3.Text);
-            subscription.PricePerMinute = decimal.Parse(textBox4.Text);
-            subscription.MinutesOutsideEU = int.Parse(textBox5.Text);
-            subscription.PricePerMinuteEU = decimal.Parse(textBox6.Text);
-            subscription.FreeSMSCount = int.Parse(textBox7.Text);
-            subscription.PricePerSMS = decimal.Parse(textBox8.Text);
-            subscription.InvoiceDate = dateTimePicker1.Value.Date;
+            Subscription.SubscriptionBuilder subscriptionBuilder = new Subscription.SubscriptionBuilder();
+            Subscription subscription = subscriptionBuilder
+                                            .SetPhoneNumber(textBox1.Text)
+                                            .SetMonthlyBill(decimal.Parse(textBox2.Text))
+                                            .SetFreeCallMinutesCount(int.Parse(textBox3.Text))
+                                            .SetPricePerMinute(decimal.Parse(textBox4.Text))
+                                            .SetMinutesOutsideEU(int.Parse(textBox5.Text))
+                                            .SetPricePerMinuteEU(decimal.Parse(textBox6.Text))
+                                            .SetFreeSMSCount(int.Parse(textBox7.Text))
+                                            .SetPricePerSMS(decimal.Parse(textBox8.Text))
+                                            .SetInvoiceDate(dateTimePicker1.Value.Date)
+                                            .Build();
             connection.Update(subscription);
             displayData();
         }
@@ -108,16 +112,18 @@ namespace Phonebook
 
         private void button3_Click(object sender, EventArgs e)
         {
-            Subscription subscription = new Subscription();
-            subscription.PhoneNumber = textBox1.Text;
-            subscription.MonthlyBill = decimal.Parse(textBox2.Text);
-            subscription.FreeCallMinutesCount = int.Parse(textBox3.Text);
-            subscription.PricePerMinute = decimal.Parse(textBox4.Text);
-            subscription.MinutesOutsideEU = int.Parse(textBox5.Text);
-            subscription.PricePerMinuteEU = decimal.Parse(textBox6.Text);
-            subscription.FreeSMSCount = int.Parse(textBox7.Text);
-            subscription.PricePerSMS = decimal.Parse(textBox8.Text);
-            subscription.InvoiceDate = dateTimePicker1.Value.Date;
+            Subscription.SubscriptionBuilder subscriptionBuilder = new Subscription.SubscriptionBuilder();
+            Subscription subscription = subscriptionBuilder
+                                            .SetPhoneNumber(textBox1.Text)
+                                            .SetMonthlyBill(decimal.Parse(textBox2.Text))
+                                            .SetFreeCallMinutesCount(int.Parse(textBox3.Text))
+                                            .SetPricePerMinute(decimal.Parse(textBox4.Text))
+                                            .SetMinutesOutsideEU(int.Parse(textBox5.Text))
+                                            .SetPricePerMinuteEU(decimal.Parse(textBox6.Text))
+                                            .SetFreeSMSCount(int.Parse(textBox7.Text))
+                                            .SetPricePerSMS(decimal.Parse(textBox8.Text))
+                                            .SetInvoiceDate(dateTimePicker1.Value.Date)
+                                            .Build();
             connection.Delete(subscription);
             displayData();
         }
