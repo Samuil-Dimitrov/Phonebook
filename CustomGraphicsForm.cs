@@ -1,19 +1,61 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Data.OleDb;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 
 namespace Phonebook
 {
+    // strategy interface
+    public interface IDataFetchingStrategy
+    {
+        DataSet FetchData(string phoneNumber);
+    }
+
+    //strategy year
+    public class FetchDataByYear : IDataFetchingStrategy
+    {
+        public DataSet FetchData(string phoneNumber)
+        {
+            var connect = new OleDbConnection(@"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = C:\Users\LENOVO\Desktop\Phonebook.accdb");
+            connect.Open();
+            string mySelect = $"Select PhoneBill, YEAR(PaymentDate) as PaymentYear " +
+                $"from Payment WHERE [PhoneNumber] = '{phoneNumber}'";
+            OleDbDataAdapter adapt = new OleDbDataAdapter(mySelect, connect);
+
+            DataSet ds = new DataSet();
+            adapt.Fill(ds);
+
+            connect.Close();
+
+            return ds;
+        }
+    }
+
+    // strategy month
+    public class FetchDataByMonth : IDataFetchingStrategy
+    {
+        public DataSet FetchData(string phoneNumber)
+        {
+            var connect = new OleDbConnection(@"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = C:\Users\LENOVO\Desktop\Phonebook.accdb");
+            connect.Open();
+            string mySelect = $"Select PhoneBill, MONTH(PaymentDate) as PaymentMonth " +
+                $"from Payment WHERE [PhoneNumber] = '{phoneNumber}'";
+            OleDbDataAdapter adapt = new OleDbDataAdapter(mySelect, connect);
+
+            DataSet ds = new DataSet();
+            adapt.Fill(ds);
+
+            connect.Close();
+
+            return ds;
+        }
+    }
+
     public partial class CustomGraphicsForm : Form
     {
+        private IDataFetchingStrategy fetchingStrategy;
+
         public CustomGraphicsForm()
         {
             InitializeComponent();
@@ -32,46 +74,43 @@ namespace Phonebook
         {
             string phoneNumber = textBox1.Text;
 
-            var connect = new OleDbConnection(@"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = C:\Users\LENOVO\Desktop\Phonebook.accdb");
-            var command = connect.CreateCommand();
-            connect.Open();
-            string mySelect = $"Select PhoneBill, YEAR(PaymentDate) as PaymentYear " +
-                $"from Payment WHERE [PhoneNumber] = '{phoneNumber}'";
-            OleDbDataAdapter adapt = new OleDbDataAdapter(mySelect, connect);
-            chart1.Titles.Clear();
-            chart1.Titles.Add("Paid by year");
+            // Use the selected strategy
+            fetchingStrategy = new FetchDataByYear();
 
-            DataSet ds = new DataSet();
-            adapt.Fill(ds);
-            chart1.DataSource = ds.Tables[0];
-
-            chart1.Series[0].XValueMember = "PaymentYear";
-            chart1.Series[0].YValueMembers = "PhoneBill";
-
-            //Bind the DataTable with Chart
-            chart1.DataBind();
+            BindChartData(phoneNumber);
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
             string phoneNumber = textBox1.Text;
 
-            var connect = new OleDbConnection(@"Provider = Microsoft.ACE.OLEDB.12.0; Data Source = C:\Users\LENOVO\Desktop\Phonebook.accdb");
-            var command = connect.CreateCommand();
-            connect.Open();
-            string mySelect = $"Select PhoneBill, MONTH(PaymentDate) as PaymentMonth " +
-                $"from Payment WHERE [PhoneNumber] = '{phoneNumber}'";
-            OleDbDataAdapter adapt = new OleDbDataAdapter(mySelect, connect);
-            chart1.Titles.Clear();
-            chart1.Titles.Add("Paid by month");
+            // Use the selected strategy
+            fetchingStrategy = new FetchDataByMonth();
 
-            DataSet ds = new DataSet();
-            adapt.Fill(ds);
+            BindChartData(phoneNumber);
+        }
+
+        private void BindChartData(string phoneNumber)
+        {
+            // Fetch data using the selected strategy
+            DataSet ds = fetchingStrategy.FetchData(phoneNumber);
+
+            // Clear existing series
+            chart1.Series.Clear();
+
+            // Add new series
+            Series series = chart1.Series.Add("PhoneBill");
+            series.XValueMember = ds.Tables[0].Columns[1].ColumnName; // Assuming the date column is at index 1
+            series.YValueMembers = ds.Tables[0].Columns[0].ColumnName; // Assuming the phone bill column is at index 0
+
+            // Set chart title
+            chart1.Titles.Clear();
+            chart1.Titles.Add("Paid by " + (fetchingStrategy is FetchDataByYear ? "year" : "month"));
+
+            // Set data source
             chart1.DataSource = ds.Tables[0];
 
-            chart1.Series[0].XValueMember = "PaymentMonth";
-            chart1.Series[0].YValueMembers = "PhoneBill";
-            //Bind the DataTable with Chart
+            // Bind the data
             chart1.DataBind();
         }
     }

@@ -48,9 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Connection.cs" />
-    <Compile Include="CustomGraphicsForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="CustomGraphicsForm.cs" />
     <Compile Include="CustomGraphicsForm.Designer.cs">
       <DependentUpon>CustomGraphicsForm.cs</DependentUpon>
     </Compile>
