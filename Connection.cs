@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.OleDb;
 using System.Linq;
 using System.Linq.Expressions;
@@ -9,7 +10,7 @@ using System.Windows.Forms;
 
 namespace Phonebook
 {
-    class Connection
+    public class Connection
     {
         public OleDbConnection connect;
         public OleDbCommand command;
@@ -215,6 +216,75 @@ namespace Phonebook
             catch (Exception err)
             {
                 MessageBox.Show($"{err}");
+            }
+            finally
+            {
+                if (connect != null)
+                {
+                    connect.Close();
+                }
+            }
+        }
+
+        public DataTable GetSubscriberPayments(string personalID)
+        {
+            try
+            {
+                command.CommandText = "SELECT P.Invoice, P.PaymentDate, S.PersonalID, S.PhoneNumber, P.PhoneBill, P.PaymentStatus " +
+                                      "FROM Payment P " +
+                                      "INNER JOIN TelephoneSubscriber S ON P.PhoneNumber = S.PhoneNumber " +
+                                      "WHERE S.PersonalID = @PersonalID";
+
+                command.CommandType = CommandType.Text;
+                connect.Open();
+
+                command.Parameters.AddWithValue("@PersonalID", personalID);
+
+                using (OleDbDataAdapter adapter = new OleDbDataAdapter(command))
+                {
+                    DataTable dt = new DataTable();
+                    adapter.Fill(dt);
+                    return dt;
+                }
+            }
+            catch (Exception err)
+            {
+                // Handle exception
+                return null;
+            }
+            finally
+            {
+                if (connect != null)
+                {
+                    connect.Close();
+                }
+            }
+        }
+
+
+        public DataTable GetSubscribersWithMultipleNumbers()
+        {
+            try
+            {
+                command.CommandText = "SELECT PersonalID, COUNT(PhoneNumber) AS NumberOfPhoneNumbers " +
+                                      "FROM TelephoneSubscriber " +
+                                      "GROUP BY PersonalID " +
+                                      "HAVING COUNT(PhoneNumber) > 1";
+
+                command.CommandType = System.Data.CommandType.Text;
+                connect.Open();
+
+                using (OleDbDataAdapter adapter = new OleDbDataAdapter(command))
+                {
+                    DataTable dt = new DataTable();
+                    adapter.Fill(dt);
+                    return dt;
+                }
+            }
+            catch (Exception err)
+            {
+                // Handle exception
+                return null;
             }
             finally
             {

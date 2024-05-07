@@ -60,6 +60,7 @@
     <Compile Include="PaymentForm.Designer.cs">
       <DependentUpon>PaymentForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="PhonebookFacade.cs" />
     <Compile Include="SubscriptionForm.cs">
       <SubType>Form</SubType>
     </Compile>

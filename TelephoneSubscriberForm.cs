@@ -38,12 +38,13 @@ namespace Phonebook
         {
             TelephoneSubscriber.TelephoneSubscriberBuilder subscriberBuilder = new TelephoneSubscriber.TelephoneSubscriberBuilder();
             TelephoneSubscriber telephoneSubscriber = subscriberBuilder
-                                                        .SetPhoneNumber(textBox1.Text)
-                                                        .SetPersonalID(textBox2.Text)
-                                                        .SetNames(textBox3.Text)
-                                                        .SetAddress(textBox4.Text)
-                                                        .Build();
-            connection.Insert(telephoneSubscriber);
+              .SetPhoneNumber(textBox1.Text)
+              .SetPersonalID(textBox2.Text)
+              .SetNames(textBox3.Text)
+              .SetAddress(textBox4.Text)
+              .Build();
+            PhonebookFacade facade = new PhonebookFacade(new Connection()); // Create facade with connection
+            facade.AddSubscriber(telephoneSubscriber); // Pass the built object to facade
             displayData();
         }
 
@@ -56,7 +57,8 @@ namespace Phonebook
                                                         .SetNames(textBox3.Text)
                                                         .SetAddress(textBox4.Text)
                                                         .Build();
-            connection.Update(telephoneSubscriber);
+            PhonebookFacade facade = new PhonebookFacade(new Connection());
+            facade.UpdateSubscriber(telephoneSubscriber);
             displayData();
         }
 
@@ -77,7 +79,8 @@ namespace Phonebook
                                                         .SetNames(textBox3.Text)
                                                         .SetAddress(textBox4.Text)
                                                         .Build();
-            connection.Delete(telephoneSubscriber);
+            PhonebookFacade facade = new PhonebookFacade(new Connection());
+            facade.DeleteSubscriber(telephoneSubscriber.PhoneNumber);
             displayData();
         }
 
@@ -90,28 +93,13 @@ namespace Phonebook
         {
             // Select No 2
             string PersonalID = textBox2.Text; // Replace with the actual subscriber ID
-            var connectionString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\Users\LENOVO\Desktop\Phonebook.accdb";
 
-            using (var connection = new OleDbConnection(connectionString))
+            PhonebookFacade facade = new PhonebookFacade(new Connection()); // Create facade with connection
+            DataTable paymentData = facade.GetSubscriberPayments(PersonalID); // Call facade method
+
+            if (paymentData != null) // Check if data retrieval was successful
             {
-                connection.Open();
-
-                string mySelect = "SELECT P.Invoice, P.PaymentDate, S.PersonalID, S.PhoneNumber, P.PhoneBill, P.PaymentStatus " +
-                                  "FROM Payment P " +
-                                  "INNER JOIN TelephoneSubscriber S ON P.PhoneNumber = S.PhoneNumber " +
-                                  "WHERE S.PersonalID = @PersonalID";
-
-                using (var command = new OleDbCommand(mySelect, connection))
-                {
-                    command.Parameters.AddWithValue("@PersonalID", PersonalID);
-
-                    using (OleDbDataAdapter adapter = new OleDbDataAdapter(command))
-                    {
-                        DataTable dt = new DataTable();
-                        adapter.Fill(dt);
-                        dataGridView1.DataSource = dt;
-                    }
-                }
+                dataGridView1.DataSource = paymentData;
             }
         }
 
@@ -119,30 +107,12 @@ namespace Phonebook
         {
             // Select No 3
             string PersonalID = textBox2.Text; // Replace with the actual subscriber ID
-            var connectionString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\Users\LENOVO\Desktop\Phonebook.accdb";
+            PhonebookFacade facade = new PhonebookFacade(new Connection()); // Create facade with connection
+            DataTable subscribersData = facade.GetSubscribersWithMultipleNumbers(); // Call facade method
 
-            using (var connection = new OleDbConnection(connectionString))
+            if (subscribersData != null) // Check if data retrieval was successful
             {
-                connection.Open();
-
-                // Updated SQL query to retrieve subscribers with more than one telephone number
-                string mySelect = "SELECT PersonalID, COUNT(PhoneNumber) AS NumberOfPhoneNumbers " +
-                                    "FROM TelephoneSubscriber " +
-                                    "WHERE PersonalID = @PersonalID " +
-                                    "GROUP BY PersonalID " +
-                                    "HAVING COUNT(PhoneNumber) > 1";
-
-                using (var command = new OleDbCommand(mySelect, connection))
-                {
-                    command.Parameters.AddWithValue("@PersonalID", PersonalID);
-
-                    using (OleDbDataAdapter adapter = new OleDbDataAdapter(command))
-                    {
-                        DataTable dt = new DataTable();
-                        adapter.Fill(dt);
-                        dataGridView1.DataSource = dt;
-                    }
-                }
+                dataGridView1.DataSource = subscribersData;
             }
         }
     }
